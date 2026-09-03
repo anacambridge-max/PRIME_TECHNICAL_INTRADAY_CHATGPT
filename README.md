@@ -1,36 +1,24 @@
-# PRIME TECHNICAL INTRADAY — 09:20 F&O SCANNER
+# PRIME TECHNICAL INTRADAY — LIVE 09:20 F&O SCANNER
 
-A probability-ranked intraday scanner for NSE F&O stocks designed to evaluate the first completed 5-minute candle (09:15–09:20 IST) and identify the strongest intraday candidates.
+Live Next.js dashboard for ranking NSE F&O equity underlyings immediately after the 09:15–09:20 IST opening candle.
 
-## Objective
+## Live data
+The backend uses the Upstox V3 intraday candle and market-quote APIs. Upstox documents 5-minute intraday candles and daily OHLC/previous OHLC fields for market analysis. The app keeps the access token server-side. citeturn0search1turn0search0
 
-At approximately 09:20 IST, scan the eligible F&O universe and rank symbols using opening structure, momentum, volume, VWAP, previous-day context, relative strength, breakout quality, and risk filters.
+## Required Vercel environment variables
+- `UPSTOX_ACCESS_TOKEN`
+- `FNO_UNIVERSE_JSON` — JSON array of current NSE F&O equity underlyings with `symbol` and `instrumentKey` (and optional `sector`).
 
-The system is a **decision-support scanner**, not a guarantee of future performance. The top-ranked symbol is the highest-scoring candidate under the model at that moment.
+Example:
+`[{"symbol":"RELIANCE","instrumentKey":"NSE_EQ|INE002A01018","sector":"Energy"}]`
 
-## Core modules
+Do not commit credentials. Upstox uses OAuth 2.0 and access tokens have a defined expiry; use the supported authentication flow to obtain a valid token. citeturn1search0turn1search3
 
-- F&O universe management
-- 5-minute opening candle analytics
-- Previous-day and multi-day context
-- VWAP / opening-range analysis
-- Volume and relative-volume analysis
-- NIFTY and sector relative strength
-- Breakout / breakdown quality filters
-- Composite Prime Score (0–100)
-- Entry trigger, invalidation and risk framework
-- Historical backtesting and walk-forward validation
-- 09:20 IST scheduled scan
-- Dashboard for ranked candidates and explanations
+## Scanner model
+The first version scores opening structure, momentum, range quality, opening volume availability and directional candle quality. The next research layer will add benchmark/sector relative strength, VWAP, multi-session context, and walk-forward calibration.
 
-## Planned stack
+The score is a ranking model, not a probability or guarantee. Historical validation must use only information available at 09:20.
 
-- Next.js / TypeScript
-- Vercel
-- Market-data provider / broker API
-- Server-side scoring engine
-- PostgreSQL/Supabase or equivalent persistence layer when required
-
-## Safety
-
-The application should clearly distinguish signal ranking from certainty. Results require independent risk management and should not be treated as financial advice.
+## Run locally
+`npm install`
+`npm run dev`
